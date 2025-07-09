@@ -1,4 +1,4 @@
-export function Sidebar({history, onSelect, selectedId}){
+export function Sidebar({history, onSelect}){
     return(
         <ul>
             {history.map(item =>(

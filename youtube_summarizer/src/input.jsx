@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export function input({onSubmit,loading}){
+export function Input({onSubmit,loading}){
     const [url, setURL] = useState("");
     return(
         <form onSubmit={
@@ -10,8 +10,11 @@ export function input({onSubmit,loading}){
             }
         }>
             <input type="text" value={url} placeholder="Paste video URL" onChange={e=>setURL(e.target.value)}/>
+            <button type="submit" disabled={loading || !url} style={{ display: "none" }}>
+                Go
+            </button>
         </form>
     )
 }
 
-export default input;
+export default Input;
