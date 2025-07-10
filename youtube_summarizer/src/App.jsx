@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Input from "./input.jsx";
 import Sidebar from "./sidebar.jsx";
+import { Logout } from "./logout.jsx";
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -11,7 +12,7 @@ function App() {
   const handleSubmit = async (url) => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8000/api/summary', {
+      const res = await fetch('/api/summary', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ link: url }),
@@ -46,6 +47,7 @@ function App() {
           <p>{summary}</p>
         </div>
       )}
+      <Logout/>
     </div>
   );
 }

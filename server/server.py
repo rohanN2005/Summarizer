@@ -15,7 +15,7 @@ app = Flask(
     static_url_path="",
     template_folder='youtube_summarizer/dist'
 )
-CORS(app)
+CORS(app,origins=['http://localhost:5173'])
 
 app.secret_key = env.get("APP_SECRET_KEY")
 
@@ -56,21 +56,23 @@ def logout():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_react(path):
+    if not session.get("user"):
+        return redirect(url_for("login"))
+
     # full filesystem path for the requested file
     full_path = os.path.join(DIST_DIR, path)
 
     # if they requested a real file (e.g. /assets/main.abc123.js or /vite.svg)
-    if path and os.path.exists(full_path):
+    full = os.path.join(DIST_DIR, path)
+    if path and os.path.isfile(full):
         return send_from_directory(DIST_DIR, path)
-
-    # otherwise (including “/”) always return index.html
     return send_from_directory(DIST_DIR, "index.html")
 
 
 @app.route('/api/summary', methods=['POST'])
 def summary_endpoint():
-    #if not session.get('user'):
-        #abort(401)
+    if not session.get('user'):
+        abort(401)
     data = request.get_json()
     link = data.get('link', '')
     title = getTitle(link)
