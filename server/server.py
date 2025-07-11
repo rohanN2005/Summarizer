@@ -5,6 +5,30 @@ from flask_cors import CORS
 from os import environ as env
 from authlib.integrations.flask_client import OAuth
 from urllib.parse import urlencode, quote_plus
+from pymongo import MongoClient
+from dotenv import load_dotenv, find_dotenv
+from datetime import datetime
+from bson import ObjectId
+
+ENV_FILE = find_dotenv()
+if ENV_FILE:
+    load_dotenv(ENV_FILE)
+
+uri = env.get("CONNECTION_STRING")
+client = MongoClient(uri)
+database = client.get_default_database()
+summaries_coll = database.user_summaries
+def serialize(summaries):
+    return [{**s, "_id": str(s["_id"])} for s in summaries]
+for doc in summaries_coll.find({}):
+    modified = False
+    for s in doc.get("summaries", []):
+        if "_id" not in s:
+            s["_id"] = ObjectId()
+            modified = True
+    if modified:
+        summaries_coll.replace_one({"_id": doc["_id"]}, doc)
+
 
 BASE = os.path.dirname(os.path.dirname(__file__))  # project-root
 DIST_DIR = os.path.join(BASE, "youtube_summarizer", "dist")
@@ -78,10 +102,56 @@ def summary_endpoint():
     title = getTitle(link)
     video_id = re.split(r'=', link)[-1]
     summary_text = summarize(video_id)
+    user_info = session["user"]["userinfo"]
+    user_id = user_info["sub"]
+    summaries_coll.update_one(
+        {"user_id": user_id},
+        {
+            "$push": {
+                "summaries": {
+                    "$each": [{
+                        "_id": ObjectId(),  
+                        "Title": title,
+                        "summary": summary_text,
+                        "created_at": datetime.utcnow()
+                    }],
+                    # keep only the last 10 entries
+                    "$slice": -10
+                }
+            }
+        },
+        upsert=True
+    )
+    data = summaries_coll.find_one({"user_id": user_id}) or {}
+    recent = data.get("summaries", [])
     return jsonify(
         videoSummary=summary_text,
-        title=title
+        title=title,
+        history = serialize(recent)
     )
+@app.route('/api/summary/<summary_id>', methods=['DELETE'])
+def delete_summary(summary_id):
+    if not session.get("user"):
+        abort(401)
+    user_id = session["user"]["userinfo"]["sub"]
+
+    result = summaries_coll.update_one(
+        {"user_id": user_id},
+        {"$pull": {"summaries": {"_id": ObjectId(summary_id)}}}
+    )
+
+    user_doc = summaries_coll.find_one({"user_id": user_id}) or {}
+    recent = user_doc.get("summaries", [])
+    return jsonify(history=serialize(recent))
+
+@app.route('/api/summary/history', methods=['GET'])
+def get_history():
+    if not session.get("user"):
+        abort(401)
+    user_id = session["user"]["userinfo"]["sub"]
+    user_doc = summaries_coll.find_one({"user_id": user_id}) or {}
+    recent = user_doc.get("summaries", [])
+    return jsonify(history=serialize(recent))
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
