@@ -1,10 +1,10 @@
-export function Sidebar({history, onSelect, handleDelete}){
+export function Sidebar({history, onSelect, onDelete}){
     return(
         <ul>
             {history.map(item =>(
-                    <li>
-                        <button key = {item.created_at} onClick={()=>onSelect(item)}>{item.Title}</button>
-                        <button onClick={() => handleDelete(item._id)}>Delete {item.Title}</button>
+                    <li key = {item.created_at}>
+                        <button  onClick={()=>onSelect(item)}>{item.Title}</button>
+                        <button onClick={() => onDelete(item._id)}>Delete</button>
                     </li>
                 )
             )}

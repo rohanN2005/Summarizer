@@ -20,14 +20,7 @@ database = client.get_default_database()
 summaries_coll = database.user_summaries
 def serialize(summaries):
     return [{**s, "_id": str(s["_id"])} for s in summaries]
-for doc in summaries_coll.find({}):
-    modified = False
-    for s in doc.get("summaries", []):
-        if "_id" not in s:
-            s["_id"] = ObjectId()
-            modified = True
-    if modified:
-        summaries_coll.replace_one({"_id": doc["_id"]}, doc)
+
 
 
 BASE = os.path.dirname(os.path.dirname(__file__))  # project-root

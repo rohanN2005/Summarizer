@@ -55,7 +55,7 @@ function App() {
 
   const onSelect = (item) => {
     setSummary(item.summary)
-    setTitle(item.title)
+    setTitle(item.Title)
   }
 
   const handleDelete = async (id) => {
@@ -64,7 +64,7 @@ function App() {
         headers: {"Content-Type":"application/json"}
       }
     );
-    if(res.ok){
+    if(!res.ok){
       console.error("Delete Failed", await res.text());
       return ;
     }
@@ -87,7 +87,7 @@ function App() {
           <p>{summary}</p>
         </div>
       )}
-      <Sidebar onSelect={onSelect} history={history} handleDelete={handleDelete}/>
+      <Sidebar onSelect={onSelect} history={history} onDelete={handleDelete}/>
       <Logout/>
     </div>
   );
