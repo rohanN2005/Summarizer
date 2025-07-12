@@ -3,6 +3,7 @@ import Input from "./input.jsx";
 import Sidebar from "./sidebar.jsx";
 import { Logout } from "./logout.jsx";
 import { useEffect } from "react";
+import "./App.css";
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -76,19 +77,30 @@ function App() {
     getHistory();
   }, []);
   return (
-    <div className="appContainer" style={{ padding: "1rem" }}>
-      <Input onSubmit={handleSubmit} loading={loading} />
+    <div className="appContainer">
+      <aside className="sidebar">
+        <Sidebar onSelect={onSelect} history={history} onDelete={handleDelete}/>
+      </aside>
 
-      {loading && <p>Loading…</p>}
+      <div className="main">
+        <div className="content">
+          {loading && <p>Loading…</p>}
 
-      {!loading && summary && (
-        <div className="result">
-          <h2>{title}</h2>
-          <p>{summary}</p>
+          {!loading && summary && (
+            <div className="result">
+              <h2 className="title">{title}</h2>
+              <p className="body">{summary}</p>
+            </div>
+          )}
         </div>
-      )}
-      <Sidebar onSelect={onSelect} history={history} onDelete={handleDelete}/>
-      <Logout/>
+
+        <div className="bottomBar">
+          <div className="inputWrapper">
+            <Input onSubmit={handleSubmit} loading={loading} />
+          </div>
+          <Logout className="logoutBtn"/>
+        </div>
+      </div>
     </div>
   );
 }
