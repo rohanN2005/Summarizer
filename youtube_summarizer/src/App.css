@@ -1,159 +1,193 @@
-html, body {
-  margin: 0;
-  padding: 0;
-  background-color: #474444;
-}
-
-/* overall layout without container padding */
-.appContainer {
+/* App Container */
+.app-container {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f7f9fb;
+  min-height: 100vh;
+  color: #222;
   display: flex;
+  flex-direction: row;
   height: 100vh;
-  font-family: sans-serif;
-  background-color: #474444;
-  color: #fff;
 }
 
-/* sidebar fixed to the left edge */
+/* Sidebar */
 .sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 250px;
-  background-color: #474444;
+  background: #2d3748;
   color: #fff;
-  border-right: 1px solid #666;
-  overflow-y: auto;
-}
-
-/* main area shifted right to accommodate sidebar */
-.main {
-  margin-left: 250px;
+  width: 320px;
+  min-width: 320px;
+  min-height: 100vh;
+  padding: 2rem 1.5rem 1rem 1.5rem;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  gap: 2rem;
+  position: relative;
 }
 
-/* center the summary text in the middle */
-.content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0 24px;
-  background-color: #474444;
-  color: #fff;
+/* History List */
+.history-list {
+  background: #f1f5f9;
+  border-radius: 8px;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  max-height: 350px;
   overflow-y: auto;
+  color: #222;
+  margin-bottom: 1.5rem;
 }
 
-/* footer bar at bottom for your input and logout */
-.bottomBar {
-  display: flex;
-  align-items: center;
-  padding: 16px;
-  border-top: 1px solid #666;
-  background-color: #474444;
-}
-
-/* allow Input to expand */
-.inputWrapper {
-  flex: 1;
-  margin-right: 16px;
-}
-
-/* style the <input> inside bottomBar */
-.bottomBar input {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #666;
-  border-right: none;
-  border-radius: 4px 0 0 4px;
-  font-size: 1rem;
-  background-color: #2a2a2a;
-  color: #fff;
-}
-
-/* logout link styling (in bottomBar) */
-.logoutBtn {
-  text-decoration: none;
-  color: #fff;
-  font-size: 0.9rem;
+.history-item {
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid #e2e8f0;
   cursor: pointer;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+  transition: background 0.15s;
+  background: #fff;
+  color: #222;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-/* summary title + body */
-.title {
-  margin-bottom: 12px;
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-item:hover {
+  background: #e9ecef;
+}
+
+.delete-btn {
+  margin-left: 1rem;
+  background: #e53e3e;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delete-btn:hover {
+  background: #c53030;
+}
+
+/* Logout Button */
+.logout-btn {
+  margin-top: auto;
+  background: #e53e3e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.logout-btn:hover {
+  background: #c53030;
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+/* Input Component */
+.input-form {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.input-form input[type="text"] {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  background: #fff;
+}
+
+.input-form input[type="text"]:focus {
+  border-color: #3182ce;
+  outline: none;
+}
+
+.input-form button {
+  padding: 0.75rem 1.5rem;
+  background: #3182ce;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.input-form button:disabled,
+.input-form button[aria-disabled="true"] {
+  background: #b6c6dd;
+  cursor: not-allowed;
+}
+
+.input-form button:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+/* Summary Display */
+.summary-container {
+  background: #fff;
+  border-radius: 8px;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+  min-height: 140px;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #2d3748;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.summary-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #fff;
-}
-.body {
-  line-height: 1.6;
-  white-space: pre-wrap;
-  max-width: 600px;
-  text-align: left;
-  color: #fff;
-}
-.loading {
-  color: #ccc;
-  font-style: italic;
+  color: #2563eb;
+  margin-bottom: 1rem;
+  word-break: break-word;
 }
 
-/* sidebar list */
-.sidebarList {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.sidebarList li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  border-bottom: 1px solid #666;
-}
-
-/* pill-style button for sidebar items */
-.itemBtn {
-  background-color: #c2fbd7;
-  border-radius: 100px;
-  box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,
-              rgba(44, 187, 99, .15) 0 1px 2px,
-              rgba(44, 187, 99, .15) 0 2px 4px,
-              rgba(44, 187, 99, .15) 0 4px 8px,
-              rgba(44, 187, 99, .15) 0 8px 16px,
-              rgba(44, 187, 99, .15) 0 16px 32px;
-  color: green;
-  cursor: pointer;
-  display: inline-block;
-  font-family: CerebriSans-Regular, -apple-system, system-ui, Roboto, sans-serif;
-  padding: 7px 20px;
-  text-align: center;
-  text-decoration: none;
-  transition: all 250ms;
-  border: 0;
-  font-size: 16px;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-}
-
-.itemBtn:hover {
-  box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,
-              rgba(44,187,99,.25) 0 1px 2px,
-              rgba(44,187,99,.25) 0 2px 4px,
-              rgba(44,187,99,.25) 0 4px 8px,
-              rgba(44,187,99,.25) 0 8px 16px,
-              rgba(44,187,99,.25) 0 16px 32px;
-  transform: scale(1.05) rotate(-1deg);
-}
-
-.deleteBtn {
-  background: none;
-  border: none;
-  color: #f66;
-  cursor: pointer;
-  margin-left: 8px;
+/* Responsive Design */
+@media (max-width: 900px) {
+  .app-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100vw;
+    min-width: 0;
+    min-height: unset;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  .main-content {
+    padding: 1.5rem 1rem;
+  }
+  .summary-container {
+    padding: 1rem;
+  }
 }

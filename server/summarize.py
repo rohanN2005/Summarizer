@@ -28,7 +28,7 @@ def summarize(videoID):
 
 def getTitle(link):
     r = requests.get(link)
-    soup = BeautifulSoup(r.text)
+    soup = BeautifulSoup(r.text,features="lxml")
 
     link = soup.find_all(name="title")[0]
     title = str(link)

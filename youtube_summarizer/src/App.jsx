@@ -1,43 +1,43 @@
-import React, { useState } from "react";
-import Input from "./input.jsx";
-import Sidebar from "./sidebar.jsx";
-import { Logout } from "./logout.jsx";
-import { useEffect } from "react";
+// src/App.jsx
+import React, { useState, useEffect } from "react";
+import InputBar from "./Input.jsx";      // <-- your MUI InputBar
+import Sidebar from "./sidebar.jsx";     // <-- your MUI Sidebar
+import Logout from "./logout.jsx";
 import "./App.css";
 
 function App() {
-  const [loading, setLoading] = useState(false);
-  const [title,   setTitle]   = useState("");
-  const [summary, setSummary] = useState("");
-  const [history, setHistory] = useState([]);
+  const [loading, setLoading]   = useState(false);
+  const [title,   setTitle]     = useState("");
+  const [summary, setSummary]   = useState("");
+  const [history, setHistory]   = useState([]);
 
-  const getHistory =  async() =>{
-    const res = await fetch('/api/summary/history', {
+  const getHistory = async () => {
+    const res = await fetch("/api/summary/history", {
       method: "GET",
-      headers: { "Content-Type": "application/json" }
-    })
+      headers: { "Content-Type": "application/json" },
+    });
     if (res.status === 401) {
-      window.location.href = '/login';
+      window.location.href = "/login";
       return;
     }
     if (!res.ok) {
       console.error("Failed to load history:", await res.text());
       return;
     }
-    const {history} = await res.json();
+    const { history } = await res.json();
     setHistory(history);
-  }
+  };
 
   const handleSubmit = async (url) => {
     setLoading(true);
     try {
-      const res = await fetch('/api/summary', {
+      const res = await fetch("/api/summary", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ link: url }),
       });
       if (res.status === 401) {
-        window.location.href = '/login';
+        window.location.href = "/login";
         return;
       }
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -55,37 +55,40 @@ function App() {
   };
 
   const onSelect = (item) => {
-    setSummary(item.summary)
-    setTitle(item.Title)
-  }
+    setTitle(item.Title);
+    setSummary(item.summary);
+  };
 
   const handleDelete = async (id) => {
-      const res = await fetch(`/api/summary/${id}`, {
-        method: "DELETE", 
-        headers: {"Content-Type":"application/json"}
-      }
-    );
-    if(!res.ok){
+    const res = await fetch(`/api/summary/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!res.ok) {
       console.error("Delete Failed", await res.text());
-      return ;
+      return;
     }
-    const {history: newHistory} = await res.json();
+    const { history: newHistory } = await res.json();
     setHistory(newHistory);
-  }
+  };
 
   useEffect(() => {
     getHistory();
   }, []);
-  return (
-    <div className="appContainer">
-      <aside className="sidebar">
-        <Sidebar onSelect={onSelect} history={history} onDelete={handleDelete}/>
-      </aside>
 
-      <div className="main">
+  return (
+    <div className="appContainer" style={{ display: "flex" }}>
+      {/* MATERIAL‑UI SIDEBAR */}
+      <Sidebar
+        history={history}
+        onSelect={onSelect}
+        onDelete={handleDelete}
+      />
+
+      {/* MAIN CONTENT */}
+      <div className="main" style={{ flexGrow: 1, padding: "1rem" }}>
         <div className="content">
           {loading && <p>Loading…</p>}
-
           {!loading && summary && (
             <div className="result">
               <h2 className="title">{title}</h2>
@@ -94,15 +97,14 @@ function App() {
           )}
         </div>
 
-        <div className="bottomBar">
-          <div className="inputWrapper">
-            <Input onSubmit={handleSubmit} loading={loading} />
-          </div>
-          <Logout className="logoutBtn"/>
-        </div>
+        {/* MATERIAL‑UI INPUT BAR (fixed to bottom) */}
+        <InputBar onSubmit={handleSubmit} loading={loading} />
+
+        {/* LOGOUT BUTTON */}
+        <Logout />
       </div>
     </div>
   );
 }
 
-export default App
+export default App;
