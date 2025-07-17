@@ -4,12 +4,13 @@ import InputBar from "./Input.jsx";      // <-- your MUI InputBar
 import Sidebar from "./sidebar.jsx";     // <-- your MUI Sidebar
 import Logout from "./logout.jsx";
 import "./App.css";
+import { Box, CircularProgress } from '@mui/material';
 
 function App() {
-  const [loading, setLoading]   = useState(false);
-  const [title,   setTitle]     = useState("");
-  const [summary, setSummary]   = useState("");
-  const [history, setHistory]   = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [title,   setTitle] = useState("");
+  const [summary, setSummary] = useState("");
+  const [history, setHistory] = useState([]);
 
   const getHistory = async () => {
     const res = await fetch("/api/summary/history", {
@@ -88,7 +89,18 @@ function App() {
       {/* MAIN CONTENT */}
       <div className="main" style={{ flexGrow: 1, padding: "1rem" }}>
         <div className="content">
-          {loading && <p>Loading…</p>}
+        {loading && (
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '60vh',
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          )}
           {!loading && summary && (
             <div className="result">
               <h2 className="title">{title}</h2>
