@@ -1,45 +1,70 @@
+// src/Sidebar.jsx
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {
   Box,
   Drawer,
-  Toolbar,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
-  IconButton
+  IconButton,
+  Divider
 } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const drawerWidth = 240;
 
-/**
- * A Material‑UI sidebar that lists history items with select and delete actions.
- *
- * param {{
- *   history: Array<{ _id: string, Title: string }>;
- *   onSelect: (item: { _id: string, Title: string }) => void;
- *   onDelete: (id: string) => void;
- * }} props
- */
 export default function Sidebar({ history, onSelect, onDelete }) {
+  const [open, setOpen] = React.useState(true);
+
+  const toggleDrawer = () => {
+    setOpen(prev => !prev);
+  };
+
   return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
+    <>
+      {/* The persistent drawer */}
+      <Drawer
+        variant="persistent"
+        anchor="left"
+        open={open}
+        sx={{
           width: drawerWidth,
-          boxSizing: 'border-box',
-        },
-      }}
-    >
-      {/* If you have an AppBar, this Toolbar makes the list start below it */}
-      <Box sx={{ overflow: 'auto' }}>
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box'
+          }
+        }}
+      >
+        {/* Header bar with toggle button */}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            p: 1
+          }}
+        >
+          <IconButton onClick={toggleDrawer} size="small">
+            <MenuIcon />
+          </IconButton>
+          
+        </Box>
+        <Divider />
+
+        {/* Your summaries list */}
         <List>
-          {history.map((item) => (
+          <ListItem>
+            <ListItemText
+              primary="Summaries"
+              sx={{ textAlign: 'center', width: '100%' }}
+            />
+          </ListItem>
+
+          {history.map(item => (
             <ListItem
               key={item._id}
               disablePadding
@@ -59,8 +84,24 @@ export default function Sidebar({ history, onSelect, onDelete }) {
             </ListItem>
           ))}
         </List>
-      </Box>
-    </Drawer>
+      </Drawer>
+
+      {/* When closed, show an “open” button at the same spot */}
+      {!open && (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: 8,
+            left: 8,
+            zIndex: theme => theme.zIndex.drawer + 1
+          }}
+        >
+          <IconButton onClick={toggleDrawer} size="small">
+            <MenuIcon />
+          </IconButton>
+        </Box>
+      )}
+    </>
   );
 }
 
@@ -68,9 +109,9 @@ Sidebar.propTypes = {
   history: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
-      Title: PropTypes.string.isRequired,
+      Title: PropTypes.string.isRequired 
     })
   ).isRequired,
   onSelect: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired
 };
