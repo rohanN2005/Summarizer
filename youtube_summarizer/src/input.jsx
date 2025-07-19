@@ -18,7 +18,7 @@ const drawerWidth = 0; // not used for bottom bar
 /**
  * A Material‑UI input bar with URL entry, submit on Enter, and loading state.
  *
- * @param {{
+ * param {{
  *   onSubmit: (url: string) => void,
  *   loading: boolean
  * }} props
@@ -61,11 +61,8 @@ export default function InputBar({ onSubmit, loading }) {
           borderRadius: '999px',
         }}
       >
-        <IconButton size="small" disabled={loading}>
-          <AddIcon />
-        </IconButton>
 
-        <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
+
 
         <Button
           startIcon={<BuildIcon />}
@@ -87,10 +84,6 @@ export default function InputBar({ onSubmit, loading }) {
           inputProps={{ 'aria-label': 'video url input' }}
           disabled={loading}
         />
-
-        <IconButton size="small" disabled={loading}>
-          <MicIcon />
-        </IconButton>
 
         {/* hidden submit button to enable Enter key */}
         <button type="submit" disabled={loading || !url} style={{ display: 'none' }}>

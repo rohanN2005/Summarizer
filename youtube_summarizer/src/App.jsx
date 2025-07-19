@@ -1,7 +1,7 @@
 // src/App.jsx
 import React, { useState, useEffect } from "react";
-import InputBar from "./input.jsx";      // <-- your MUI InputBar
-import Sidebar from "./sidebar.jsx";     // <-- your MUI Sidebar
+import InputBar from "./input.jsx";
+import Sidebar from "./sidebar.jsx";
 import Logout from "./logout.jsx";
 import { Box, CircularProgress } from '@mui/material';
 

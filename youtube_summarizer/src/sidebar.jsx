@@ -13,6 +13,9 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import DeleteIcon from '@mui/icons-material/Delete';
+import TextField from '@mui/material/TextField';
+import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
 
 const drawerWidth = 240;
 
@@ -52,6 +55,17 @@ export default function Sidebar({ history, onSelect, onDelete }) {
             <MenuIcon />
           </IconButton>
           
+        </Box>
+
+        <Box>  
+          <TextField fullWidth label="Search"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            )
+          }}/>
         </Box>
         <Divider />
 
