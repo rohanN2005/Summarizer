@@ -16,15 +16,30 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
+import CreateIcon from '@mui/icons-material/Create';
+
 
 const drawerWidth = 240;
 
-export default function Sidebar({ history, onSelect, onDelete }) {
+export default function Sidebar({ history, onSelect, onDelete, newSummarySelect }) {
   const [open, setOpen] = React.useState(true);
+  const [searchTerm, setSearchTerm] = React.useState('')
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value)
+  }
+
+  const filteredHistory = history.filter(item =>
+    item.Title
+    .toLowerCase()
+    .includes(searchTerm.toLowerCase())
+  )
 
   const toggleDrawer = () => {
     setOpen(prev => !prev);
   };
+
+
 
   return (
     <>
@@ -58,7 +73,7 @@ export default function Sidebar({ history, onSelect, onDelete }) {
         </Box>
 
         <Box>  
-          <TextField fullWidth label="Search"
+          <TextField fullWidth onChange={handleSearchChange} label="Search"
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -72,13 +87,21 @@ export default function Sidebar({ history, onSelect, onDelete }) {
         {/* Your summaries list */}
         <List>
           <ListItem>
+            <ListItemButton
+              onClick={() => newSummarySelect()}
+            >
+              <ListItemText primary="New Summary"/>
+              <CreateIcon />
+            </ListItemButton>
+          </ListItem>
+          <ListItem>
             <ListItemText
               primary="Summaries"
               sx={{ textAlign: 'center', width: '100%' }}
             />
           </ListItem>
 
-          {history.map(item => (
+          {filteredHistory.map(item => (
             <ListItem
               key={item._id}
               disablePadding

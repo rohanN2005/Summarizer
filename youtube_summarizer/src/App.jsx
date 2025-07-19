@@ -59,6 +59,11 @@ function App() {
     setSummary(item.summary);
   };
 
+  const newSummarySelect= () => {
+    setTitle("");
+    setSummary("");
+  }
+
   const handleDelete = async (id) => {
     const res = await fetch(`/api/summary/${id}`, {
       method: "DELETE",
@@ -83,6 +88,7 @@ function App() {
         history={history}
         onSelect={onSelect}
         onDelete={handleDelete}
+        newSummarySelect={newSummarySelect}
       />
 
       {/* MAIN CONTENT */}
