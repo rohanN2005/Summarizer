@@ -9,6 +9,7 @@ from pymongo import MongoClient
 from dotenv import load_dotenv, find_dotenv
 from datetime import datetime
 from bson import ObjectId
+from werkzeug.utils import secure_filename
 
 ENV_FILE = find_dotenv()
 if ENV_FILE:
@@ -145,6 +146,24 @@ def get_history():
     user_doc = summaries_coll.find_one({"user_id": user_id}) or {}
     recent = user_doc.get("summaries", [])
     return jsonify(history=serialize(recent))
+
+#@app.route('/api/summary/upload', methods = ['POST'])
+#def upload_summary():
+    #if not session.get("user"):
+        #abort(401)
+    #uploaded_file = request.files.get('file')
+    #if not uploaded_file:
+        #return jsonify({"error": "no file part"}), 400
+    #original_fileName = uploaded_file.filename
+    #safe_filename = secure_filename(original_fileName)
+    #ext = os.path.splitext(secure_filename)[1].lower()
+    #if ext in ".mp4":
+        #return ;
+
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)

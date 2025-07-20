@@ -77,6 +77,33 @@ function App() {
     setHistory(newHistory);
   };
 
+  const onUpload = async (userFile) => {
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('file', userFile);
+    try {
+      const res = await fetch("/api/summary/upload", {
+        method: "POST",
+        body: formData,
+      });
+      if (res.status === 401) {
+        window.location.href = "/login";
+        return;
+      }
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const { title, videoSummary, history } = await res.json();
+      setTitle(title);
+      setSummary(videoSummary);
+      setHistory(history);
+    } catch (err) {
+      console.error("Error fetching summary:", err);
+      setTitle("Error");
+      setSummary("Could not get summary. Check console for details.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getHistory();
   }, []);

@@ -18,7 +18,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import CreateIcon from '@mui/icons-material/Create';
 
-
 const drawerWidth = 240;
 
 export default function Sidebar({ history, onSelect, onDelete, newSummarySelect }) {

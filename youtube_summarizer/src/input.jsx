@@ -9,9 +9,7 @@ import {
   Divider,
   Button
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import BuildIcon from '@mui/icons-material/Build';
-import MicIcon from '@mui/icons-material/Mic';
+import AttachmentIcon from '@mui/icons-material/Attachment';
 
 const drawerWidth = 0; // not used for bottom bar
 
@@ -23,13 +21,25 @@ const drawerWidth = 0; // not used for bottom bar
  *   loading: boolean
  * }} props
  */
-export default function InputBar({ onSubmit, loading }) {
+export default function InputBar({ onSubmit, loading, onUpload }) {
   const [url, setUrl] = React.useState('');
+  const fileInputRef = React.useRef(null); 
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!url || loading) return;
     onSubmit(url);
+  };
+
+  const handleAttachClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    // do something with `file`, e.g. upload or pass to parent
+    console.log("User selected file:", file);
   };
 
   return (
@@ -61,20 +71,21 @@ export default function InputBar({ onSubmit, loading }) {
           borderRadius: '999px',
         }}
       >
-
-
-
-        <Button
-          startIcon={<BuildIcon />}
-          size="small"
-          disabled={loading}
-          sx={{
-            textTransform: 'none',
-            fontWeight: 500,
-          }}
-        >
-          Tools
-        </Button>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".mp3,.mp4"
+        style={{ display: "none" }}
+        onChange={handleFileChange}
+        onSubmit={onUpload}
+      />
+      <IconButton
+        onClick={handleAttachClick}
+        disabled={loading}
+        aria-label="Attach file"
+      >
+        <AttachmentIcon />
+      </IconButton>
 
         <InputBase
           sx={{ ml: 1, flex: 1, fontSize: '0.95rem' }}
