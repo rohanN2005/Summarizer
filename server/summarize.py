@@ -5,8 +5,8 @@ from google import genai
 from youtube_transcript_api import YouTubeTranscriptApi
 from bs4 import BeautifulSoup
 import argparse
-import io
-import os
+import sys
+from moviepy.editor import VideoFileClip
 
 from google.cloud import speech
 
@@ -41,9 +41,3 @@ def getTitle(link):
     title = title.replace("<title>","")
     title = title.replace("</title>","")
     return title
-
-#def transcribe_file(speech_file: str, encoding: str, sample_rate: int, language: str):
-    #client = speech.SpeechClient()
-    #with io.open(speech_file, "rb") as f:
-        #content = f.read()
-    #return ;
