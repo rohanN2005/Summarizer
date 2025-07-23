@@ -142,7 +142,7 @@ function App() {
         </div>
 
         {/* MATERIAL‑UI INPUT BAR (fixed to bottom) */}
-        <InputBar onSubmit={handleSubmit} loading={loading} />
+        <InputBar onSubmit={handleSubmit} loading={loading} onUpload={onUpload}/>
 
         {/* LOGOUT BUTTON */}
         <Logout />

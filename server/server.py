@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, abort, send_from_directory
 import os, re
-from summarize import summarize, getTitle
+from summarize import summarize, getTitle, summarizeMP3, summarizeTranscript, uploadTitle
 from flask_cors import CORS
 from os import environ as env
 from authlib.integrations.flask_client import OAuth
@@ -159,12 +159,39 @@ def upload_summary():
     original_fileName = uploaded_file.filename
     safe_filename = secure_filename(original_fileName)
     ext = os.path.splitext(safe_filename)[1].lower()
-    if ext == ".mp4":
-       return ;
-
-
-
-
+    if ext != '.mp3':
+        return jsonify({"error": "unsupported file type; only .mp3 allowed"}), 400
+    file_bytes = uploaded_file.read()
+    summary = summarizeMP3(file_bytes,"en-US")
+    title = uploadTitle(summary)
+    user_info = session["user"]["userinfo"]
+    user_id = user_info["sub"]
+    summaries_coll.update_one(
+        {"user_id": user_id},
+        {
+            "$push": {
+                "summaries": {
+                    "$each": [{
+                        "_id": ObjectId(),  
+                        "Title": title,
+                        "summary": summary,
+                        "created_at": datetime.utcnow()
+                    }],
+                    # keep only the last 10 entries
+                    "$slice": -10
+                }
+            }
+        },
+        upsert=True
+    )
+    data = summaries_coll.find_one({"user_id": user_id}) or {}
+    recent = data.get("summaries", [])
+    return jsonify(
+        videoSummary=summary,
+        title=title,
+        history = serialize(recent)
+    )
+    
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)

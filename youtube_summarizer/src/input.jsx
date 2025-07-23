@@ -38,8 +38,8 @@ export default function InputBar({ onSubmit, loading, onUpload }) {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    // do something with `file`, e.g. upload or pass to parent
-    console.log("User selected file:", file);
+    onUpload(file);
+    e.target.value = null;
   };
 
   return (
@@ -74,10 +74,9 @@ export default function InputBar({ onSubmit, loading, onUpload }) {
       <input
         ref={fileInputRef}
         type="file"
-        accept=".mp3,.mp4"
+        accept=".mp3"
         style={{ display: "none" }}
         onChange={handleFileChange}
-        onSubmit={onUpload}
       />
       <IconButton
         onClick={handleAttachClick}
