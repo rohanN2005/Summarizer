@@ -1,6 +1,7 @@
 // src/Sidebar.jsx
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import { useColorMode } from './ThemeContext';
 import {
   Box,
   Drawer,
@@ -9,7 +10,9 @@ import {
   ListItemButton,
   ListItemText,
   IconButton,
-  Divider
+  Divider,
+  Switch,
+  Tooltip
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -17,12 +20,15 @@ import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import CreateIcon from '@mui/icons-material/Create';
+import DarkModeSwitch from './DarkModeSwitch';
 
 const drawerWidth = 240;
 
 export default function Sidebar({ history, onSelect, onDelete, newSummarySelect }) {
   const [open, setOpen] = React.useState(true);
   const [searchTerm, setSearchTerm] = React.useState('')
+  const { mode, toggleColorMode } = useColorMode();
+
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value)
@@ -68,7 +74,7 @@ export default function Sidebar({ history, onSelect, onDelete, newSummarySelect 
           <IconButton onClick={toggleDrawer} size="small">
             <MenuIcon />
           </IconButton>
-          
+          <DarkModeSwitch/>
         </Box>
 
         <Box>  
