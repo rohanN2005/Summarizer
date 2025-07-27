@@ -191,6 +191,15 @@ def upload_summary():
         title=title,
         history = serialize(recent)
     )
+
+@app.route("/api/userinfo", methods=["GET"])
+def get_user_info():
+    if not session.get("user"):
+        abort(401)
+    user_info = session["user"]["userinfo"]
+    return jsonify({
+        "picture": user_info.get("picture")
+    })
     
 
 if __name__ == "__main__":

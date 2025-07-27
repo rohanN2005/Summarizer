@@ -15,6 +15,7 @@ function App() {
     const res = await fetch("/api/summary/history", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
+      credentials: "include"
     });
     if (res.status === 401) {
       window.location.href = "/login";
@@ -35,6 +36,7 @@ function App() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ link: url }),
+        credentials: "include"
       });
       if (res.status === 401) {
         window.location.href = "/login";
@@ -68,6 +70,7 @@ function App() {
     const res = await fetch(`/api/summary/${id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
+      credentials: "include"
     });
     if (!res.ok) {
       console.error("Delete Failed", await res.text());
@@ -85,6 +88,7 @@ function App() {
       const res = await fetch("/api/summary/upload", {
         method: "POST",
         body: formData,
+        credentials: "include"
       });
       if (res.status === 401) {
         window.location.href = "/login";
