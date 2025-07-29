@@ -6,7 +6,7 @@ export const useColorMode = () => useContext(ThemeContext);
 
 export default function ThemeProvider({ children }) {
   const [mode, setMode] = useState(() => {
-    return localStorage.getItem('colorMode') || 'light';
+    return localStorage.getItem('colorMode') || 'dark';
   });
   const toggleColorMode = () => {
     setMode((prev) => {
