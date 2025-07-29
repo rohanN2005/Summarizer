@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: youtube-summarizer
+    env: python
+    buildCommand: |
+      cd youtube_summarizer && npm install && npm run build
+      pip install -r requirements.txt
+    startCommand: python server/server.py
+    envVars:
+      - key: AUTH0_CLIENT_ID
+        sync: false
+      - key: AUTH0_CLIENT_SECRET
+        sync: false
+      - key: AUTH0_DOMAIN
+        sync: false
+      - key: AUTH0_CALLBACK_URL
+        sync: false
+      - key: CONNECTION_STRING
+        sync: false
+      - key: GOOGLE_CLOUD_API_KEY
+        sync: false
+      - key: APP_SECRET_KEY
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false

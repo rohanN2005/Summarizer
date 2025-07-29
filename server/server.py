@@ -26,7 +26,7 @@ def serialize(summaries):
 
 
 
-BASE = os.path.dirname(os.path.dirname(__file__))  # project-root
+BASE = os.path.dirname(os.path.dirname(__file__))
 DIST_DIR = os.path.join(BASE, "youtube_summarizer", "dist")
 
 app = Flask(
@@ -35,7 +35,7 @@ app = Flask(
     static_url_path="",
     template_folder='youtube_summarizer/dist'
 )
-CORS(app,origins=['http://localhost:5173'])
+CORS(app, origins=env.get("CORS_ORIGIN", "http://localhost:5173"))
 
 app.secret_key = env.get("APP_SECRET_KEY")
 
@@ -76,6 +76,8 @@ def logout():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_react(path):
+    if path.startswith("api/"):
+        abort(404)
     if not session.get("user"):
         return redirect(url_for("login"))
 
@@ -203,4 +205,4 @@ def get_user_info():
     
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8000)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
